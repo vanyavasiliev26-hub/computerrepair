@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-    // Главная страница
+
     public function index()
     {
         $services = Service::take(4)->get();
@@ -24,20 +24,20 @@ class HomeController extends Controller
         return view('welcome', compact('services', 'reviews', 'articles', 'promotions', 'news'));
     }
 
-    // Страница "О компании"
+
     public function about()
     {
         return view('about');
     }
 
-    // Страница "Услуги"
+
     public function services()
     {
         $services = Service::all();
         return view('services', compact('services'));
     }
 
-    // Страница "Отзывы"
+
     public function reviews()
     {
         $reviews = Review::approved()->with('user')->latest()->paginate(10);
@@ -55,7 +55,7 @@ class HomeController extends Controller
         return view('reviews', compact('reviews', 'stats'));
     }
 
-    // Сохранение отзыва
+
     public function storeReview(Request $request)
     {
         if (!Auth::check()) {
@@ -77,7 +77,7 @@ class HomeController extends Controller
         return redirect()->route('reviews')->with('success', 'Спасибо за отзыв! Он будет опубликован после проверки.');
     }
 
-    // Страница "Контакты"
+
     public function contacts()
     {
         return view('contacts');
