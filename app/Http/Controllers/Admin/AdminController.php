@@ -27,7 +27,7 @@ class AdminController extends Controller
         });
     }
 
-    // ==================== ДАШБОРД ====================
+    // Даашборд 
     public function dashboard()
     {
         $stats = [
@@ -52,7 +52,7 @@ class AdminController extends Controller
         return view('admin.dashboard', compact('stats', 'topServices', 'recentOrders'));
     }
 
-    // ==================== УПРАВЛЕНИЕ УСЛУГАМИ ====================
+    // Управление услугами
     public function services()
     {
         $services = Service::orderBy('id', 'desc')->get();
@@ -151,7 +151,7 @@ class AdminController extends Controller
         return back()->with('error', 'Изображение не найдено');
     }
 
-    // ==================== УПРАВЛЕНИЕ ЗАЯВКАМИ ====================
+    // Управление заявками 
     public function orders()
     {
         $orders = Order::with('user', 'service')->latest()->paginate(20);
@@ -172,7 +172,7 @@ class AdminController extends Controller
         return back()->with('success', 'Статус заявки обновлен');
     }
 
-    // ==================== УПРАВЛЕНИЕ АКЦИЯМИ ====================
+    // Управление акциями
     public function promotions()
     {
         $promotions = Promotion::orderBy('id', 'desc')->get();
@@ -245,7 +245,7 @@ class AdminController extends Controller
         return redirect()->route('admin.promotions')->with('success', 'Акция удалена');
     }
 
-    // ==================== УПРАВЛЕНИЕ НОВОСТЯМИ ====================
+    // Управление новостями
     public function news()
     {
         $news = News::orderBy('id', 'desc')->paginate(20);
@@ -320,7 +320,7 @@ class AdminController extends Controller
         return redirect()->route('admin.news')->with('success', 'Новость удалена');
     }
 
-    // ==================== УПРАВЛЕНИЕ ОТЗЫВАМИ ====================
+    // Управление отзывами
     public function reviews()
     {
         $reviews = Review::with('user')->orderBy('created_at', 'desc')->paginate(20);
@@ -341,7 +341,7 @@ class AdminController extends Controller
         return back()->with('success', 'Отзыв удален');
     }
 
-    // ==================== УПРАВЛЕНИЕ СТАТЬЯМИ ====================
+    // Управление статьями
     public function createArticle()
     {
         return view('admin.articles.create');
