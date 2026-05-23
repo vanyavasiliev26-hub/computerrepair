@@ -10,13 +10,13 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    // Показать форму входа
+
     public function showLogin()
     {
         return view('auth.login');
     }
 
-    // Обработка входа
+
     public function login(Request $request)
     {
         $request->validate([
@@ -34,13 +34,12 @@ class AuthController extends Controller
         return back()->with('error', 'Неверный email или пароль');
     }
 
-    // Показать форму регистрации
+
     public function showRegister()
     {
         return view('auth.register');
     }
 
-    // Обработка регистрации
     public function register(Request $request)
     {
         $request->validate([
@@ -62,17 +61,17 @@ class AuthController extends Controller
         return redirect()->route('profile')->with('success', 'Регистрация прошла успешно! Добро пожаловать!');
     }
 
-    // Выход из системы
+
     public function logout()
     {
         Auth::logout();
         return redirect()->route('home')->with('success', 'Вы вышли из системы');
     }
 
-    // Профиль пользователя с заявками
+
     public function profile()
     {
-        // Проверяем, авторизован ли пользователь
+
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'Сначала войдите в систему');
         }
@@ -85,53 +84,3 @@ class AuthController extends Controller
         
         return view('auth.profile', compact('user', 'orders'));
     }
-
-    // Обновление профиля
-    public function updateProfile(Request $request)
-    {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
-
-        $user = Auth::user();
-
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-        ]);
-
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-        ]);
-
-        return back()->with('success', 'Профиль обновлен успешно');
-    }
-
-    // Смена пароля
-    public function updatePassword(Request $request)
-    {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
-
-        $request->validate([
-            'current_password' => 'required',
-            'new_password' => 'required|min:4|confirmed'
-        ]);
-
-        $user = Auth::user();
-
-        if (!Hash::check($request->current_password, $user->password)) {
-            return back()->with('error', 'Текущий пароль неверен');
-        }
-
-        $user->update([
-            'password' => Hash::make($request->new_password)
-        ]);
-
-        return back()->with('success', 'Пароль успешно изменен');
-    }
-}
