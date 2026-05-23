@@ -14,14 +14,14 @@ class OrderController extends Controller
         $this->middleware('auth');
     }
 
-    // Страница создания заявки
+
     public function create()
     {
         $services = Service::all();
         return view('order.create', compact('services'));
     }
 
-    // Сохранение заявки
+
     public function store(Request $request)
     {
         $request->validate([
@@ -42,21 +42,21 @@ class OrderController extends Controller
         return redirect()->route('order.show', $order->id)->with('success', 'Заявка успешно создана! Номер заявки: ' . $order->order_number);
     }
 
-    // Страница "Мои заявки" (все заявки пользователя)
+
     public function index()
     {
         $orders = Auth::user()->orders()->with('service')->orderBy('created_at', 'desc')->get();
         return view('order.index', compact('orders'));
     }
 
-    // Просмотр одной заявки
+
     public function show($id)
     {
         $order = Order::with('service')->where('user_id', Auth::id())->findOrFail($id);
         return view('order.show', compact('order'));
     }
 
-    // Отмена заявки
+
     public function cancel($id)
     {
         $order = Order::where('user_id', Auth::id())->findOrFail($id);
